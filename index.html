@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Weather Recommendation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+    }
+    .box {
+      max-width: 400px;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    pre {
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h2>Weather Recommendation</h2>
+
+    <input id="city" placeholder="Enter city name (e.g. Istanbul)">
+    <button id="btn">Get Recommendation</button>
+
+    <pre id="result"></pre>
+  </div>
+
+  <script>
+    const API_BASE = "https://weather-project-1-mubu.onrender.com";
+
+    document.getElementById("btn").addEventListener("click", async () => {
+      const city = document.getElementById("city").value.trim();
+      const result = document.getElementById("result");
+
+      if (!city) {
+        result.textContent = "Please enter a city name.";
+        return;
+      }
+
+      result.textContent = "Loading...";
+
+      try {
+        const res = await fetch(`${API_BASE}/weather?city=${encodeURIComponent(city)}`);
+        const data = await res.json();
+
+        result.textContent =
+          `City: ${data.city}\n` +
+          `Temperature: ${data.temperature}°C\n` +
+          `Weather: ${data.weather}\n` +
+          `Wind Speed: ${data.wind_speed} m/s\n` +
+          `Recommendation: ${data.recommendation}`;
+      } catch (err) {
+        result.textContent = "Error fetching data.";
+      }
+    });
+  </script>
+
+</body>
+</html>
